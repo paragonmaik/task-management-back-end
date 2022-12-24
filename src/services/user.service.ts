@@ -2,8 +2,10 @@ import { IUser } from '../interfaces/IUser';
 import userModel from '../models/user.model';
 
 export const findUserByUniqueField = async (field: string, value: string) => {
-	const user = await userModel.findOne({ value }).exec();
-	console.log(user);
+	const user = await userModel
+		.findOne({ [field]: value }, { _id: 0, boards: 0 })
+		.exec();
+
 	return user;
 };
 

@@ -6,12 +6,23 @@ describe('Test helper functions', () => {
 		connectDB();
 	});
 
-	afterEach(async () => {
+	afterAll(async () => {
 		disconnectDB();
 	});
 
-	it('tests whether find user function returns expected result', async () => {
+	it('tests whether find findUserByUniqueField returns a user by email', async () => {
+		const user = await findUserByUniqueField('email', 'jonbovi@example.com');
+		expect(user?.password).toBeDefined();
+		expect(user?.userName).toBeDefined();
+		expect(user?.email).toBeDefined();
+		expect(user?._id).toBeUndefined();
+	});
+
+	it('tests whether find findUserByUniqueField returns a user by userName', async () => {
 		const user = await findUserByUniqueField('userName', 'bonjovi');
-		expect(user).toBe('');
+		expect(user?.password).toBeDefined();
+		expect(user?.userName).toBeDefined();
+		expect(user?.email).toBeDefined();
+		expect(user?._id).toBeUndefined();
 	});
 });
