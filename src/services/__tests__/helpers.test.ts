@@ -1,17 +1,17 @@
-import { findUserByUniqueField } from '../user.service';
-import { connectDB, disconnectDB } from '../../database/connection';
+import { findUserByUniqueField } from '../helpers/helpers';
+import { disconnectDB, testSetup } from '../../database/connection';
 
 describe('Test helper functions', () => {
-	beforeEach(async () => {
-		connectDB();
+	beforeAll(async () => {
+		await testSetup();
 	});
 
 	afterAll(async () => {
-		disconnectDB();
+		await disconnectDB();
 	});
 
 	it('tests whether find findUserByUniqueField returns a user by email', async () => {
-		const user = await findUserByUniqueField('email', 'jonbovi@example.com');
+		const user = await findUserByUniqueField('email', 'donkey@example.com');
 		expect(user?.password).toBeDefined();
 		expect(user?.userName).toBeDefined();
 		expect(user?.email).toBeDefined();
@@ -19,7 +19,7 @@ describe('Test helper functions', () => {
 	});
 
 	it('tests whether find findUserByUniqueField returns a user by userName', async () => {
-		const user = await findUserByUniqueField('userName', 'bonjovi');
+		const user = await findUserByUniqueField('userName', 'donkeykong');
 		expect(user?.password).toBeDefined();
 		expect(user?.userName).toBeDefined();
 		expect(user?.email).toBeDefined();

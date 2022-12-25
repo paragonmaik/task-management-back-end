@@ -1,15 +1,15 @@
 import * as user from '../user.service';
 import { findUserByUniqueField } from '../helpers/helpers';
-import { connectDB, disconnectDB } from '../../database/connection';
+import { disconnectDB, testSetup } from '../../database/connection';
 import { userExample1 } from './mocks/userMocks';
 
 describe('User service', () => {
-	beforeEach(async () => {
-		connectDB();
+	beforeAll(async () => {
+		await testSetup();
 	});
 
 	afterAll(async () => {
-		disconnectDB();
+		await disconnectDB();
 	});
 
 	describe('Registers new user', () => {

@@ -8,13 +8,17 @@ const uri = process.env.MONGO_URI || '';
 export const connectDB = async () => {
 	try {
 		const connection = await mongoose.connect(uri);
-		await dbSeed();
 
 		console.log(`MongoDb connected: ${connection.connection.host}`);
 	} catch (e) {
 		console.log(e);
 		process.exit(1);
 	}
+};
+
+export const testSetup = async () => {
+	await connectDB();
+	await dbSeed();
 };
 
 export const disconnectDB = async () => {

@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../app';
-import { connectDB, disconnectDB } from '../database/connection';
+import { disconnectDB, testSetup } from '../database/connection';
 import { StatusCodes } from 'http-status-codes';
 import {
 	userExample1,
@@ -8,12 +8,12 @@ import {
 } from '../services/__tests__/mocks/userMocks';
 
 describe('POST /user', () => {
-	beforeEach(async () => {
-		connectDB();
+	beforeAll(async () => {
+		await testSetup();
 	});
 
 	afterAll(async () => {
-		disconnectDB();
+		await disconnectDB();
 	});
 
 	it('tests a successful user registration request', async () => {
