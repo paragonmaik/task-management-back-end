@@ -15,3 +15,12 @@ export const badUserExampleList1 = [
 		password: 'noworne',
 	},
 ];
+
+export const badUserExampleList2 = [
+	{
+		email: 'donkey@example.com',
+	},
+	{
+		password: 'noworne',
+	},
+];
