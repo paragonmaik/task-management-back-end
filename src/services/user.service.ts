@@ -4,7 +4,12 @@ import { StatusCodes } from 'http-status-codes';
 import { createToken, hashPassword } from '../utils/auth';
 import userModel from '../models/user.model';
 
-export const findUserByUniqueField = async (field: string, value: string) => {
+type UserQueryField = 'email' | 'userName';
+
+export const findUserByUniqueField = async (
+	field: UserQueryField,
+	value: string
+) => {
 	const user = await userModel
 		.findOne({ [field]: value }, { _id: 0, boards: 0 })
 		.exec();
