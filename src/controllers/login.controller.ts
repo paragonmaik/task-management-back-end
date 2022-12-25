@@ -8,4 +8,6 @@ export const signIn = async (
 	res: Response
 ) => {
 	const token = await login.authUser(req.body);
+
+	res.status(StatusCodes.OK).json({ token });
 };
