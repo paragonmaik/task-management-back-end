@@ -1,4 +1,5 @@
 import * as user from '../user.service';
+import { findUserByUniqueField } from '../helpers/helpers';
 import { connectDB, disconnectDB } from '../../database/connection';
 import { userExample1 } from './mocks/userMocks';
 
@@ -19,7 +20,7 @@ describe('User service', () => {
 		});
 
 		it('tests whether user was registered successfully', async () => {
-			const resgisteredUser = await user.findUserByUniqueField(
+			const resgisteredUser = await findUserByUniqueField(
 				'email',
 				userExample1.email
 			);
