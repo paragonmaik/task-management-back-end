@@ -26,6 +26,7 @@ describe('POST /user', () => {
 	it('tests whether user is already registered', async () => {
 		const response = await request(app).post('/user').send(userExample1);
 
+		expect(response.statusCode).toBe(StatusCodes.CONFLICT);
 		expect(response.body.message).toBe('User already registered!');
 	});
 
