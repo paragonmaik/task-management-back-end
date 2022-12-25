@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import { dbSeed } from './dbSeed';
 
 dotenv.config({ path: '.env' });
 const uri = process.env.MONGO_URI || '';
@@ -7,6 +8,7 @@ const uri = process.env.MONGO_URI || '';
 export const connectDB = async () => {
 	try {
 		const connection = await mongoose.connect(uri);
+		await dbSeed();
 
 		console.log(`MongoDb connected: ${connection.connection.host}`);
 	} catch (e) {
