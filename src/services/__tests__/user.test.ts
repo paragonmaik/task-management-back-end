@@ -29,4 +29,16 @@ describe('User service', () => {
 			expect(resgisteredUser?.userName).toBe(userExample1.userName);
 		});
 	});
+
+	describe('Delete registered user from the database', () => {
+		it('tests whether user is deleted', async () => {
+			await user.deleteUser(userExample1.email);
+			const deletedUser = await findUserByUniqueField(
+				'email',
+				userExample1.email
+			);
+
+			expect(deletedUser).toBeNull();
+		});
+	});
 });
