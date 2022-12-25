@@ -2,7 +2,10 @@ import request from 'supertest';
 import app from '../app';
 import { connectDB, disconnectDB } from '../database/connection';
 import { StatusCodes } from 'http-status-codes';
-import { userExample1 } from '../services/__tests__/mocks/userMocks';
+import {
+	userExample1,
+	badUserExampleList1,
+} from '../services/__tests__/mocks/userMocks';
 
 describe('POST /user', () => {
 	beforeEach(async () => {
@@ -20,9 +23,18 @@ describe('POST /user', () => {
 		expect(response.body.token).toBeDefined();
 	});
 
-	it('tests an unsuccessful user registration request', async () => {
+	it('tests whether user is already registered', async () => {
 		const response = await request(app).post('/user').send(userExample1);
 
 		expect(response.body.message).toBe('User already registered!');
+	});
+
+	it('tests request with invalid data', async () => {
+		for (const badUser of badUserExampleList1) {
+			const response = await request(app).post('/user').send(badUser);
+
+			expect(response.statusCode).toBe(StatusCodes.BAD_REQUEST);
+			expect(response.body.message).toBeDefined();
+		}
 	});
 });
