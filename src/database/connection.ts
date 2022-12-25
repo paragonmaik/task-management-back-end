@@ -16,5 +16,6 @@ export const connectDB = async () => {
 };
 
 export const disconnectDB = async () => {
+	await mongoose.connection.db.dropDatabase();
 	await mongoose.connection.close();
 };
