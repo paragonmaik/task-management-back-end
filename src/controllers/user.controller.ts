@@ -11,3 +11,10 @@ export const createUser = async (
 
 	res.status(StatusCodes.CREATED).json({ token });
 };
+
+export const deleteUserByEmail = async (req: Request, res: Response) => {
+	const { email } = res.locals.payload;
+
+	await user.deleteUser(email);
+	res.status(StatusCodes.NO_CONTENT).end();
+};

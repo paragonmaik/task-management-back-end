@@ -22,6 +22,5 @@ export const registerNewUser = async (user: IUser) => {
 	return token;
 };
 
-export const deleteUser = async (email: string) => {
+export const deleteUser = async (email: string) =>
 	await userModel.deleteOne({ email });
-};
