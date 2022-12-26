@@ -36,6 +36,7 @@ describe('POST /board', () => {
 			email: 'donkey@example.com',
 			password: 'aquaticambience',
 		});
+
 		for (const badBoard of badBoardExampleList1) {
 			const boardResponse = await request(app)
 				.post('/board')
