@@ -12,9 +12,12 @@ describe('Board service', () => {
 
 	describe('Creates new board', () => {
 		it('tests whether a new board is created', async () => {
-			const createdBoard = await board.createNewBoard({
-				boardName: 'Donkey kong III',
-			});
+			const createdBoard = await board.createNewBoard(
+				{
+					boardName: 'Donkey kong III',
+				},
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
 
 			expect(createdBoard).toBeTruthy();
 		});

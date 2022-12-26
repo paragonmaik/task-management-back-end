@@ -26,6 +26,7 @@ describe('POST /board', () => {
 			})
 			.set('Authorization', loginResponse.body.token);
 
+		console.log(boardResponse.body);
 		expect(boardResponse.statusCode).toBe(StatusCodes.CREATED);
 		expect(boardResponse.body.columns).toBeDefined();
 		expect(boardResponse.body.boardName).toBe('Donkey kong III');

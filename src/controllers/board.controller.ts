@@ -7,7 +7,8 @@ export const createBoard = async (
 	req: Request<unknown, unknown, IBoard>,
 	res: Response
 ) => {
-	const createdBoard = await board.createNewBoard(req.body);
+	const userPayload = res.locals.payload;
+	const createdBoard = await board.createNewBoard(req.body, userPayload);
 
 	res.status(StatusCodes.CREATED).json(createdBoard);
 };
