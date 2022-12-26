@@ -1,4 +1,6 @@
+import { Types } from 'mongoose';
+
 export interface ITask {
 	description: string;
-	subTasks?: [];
+	subTasks?: Array<Types.ObjectId>;
 }

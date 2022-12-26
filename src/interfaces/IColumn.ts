@@ -1,4 +1,6 @@
+import { Types } from 'mongoose';
+
 export interface IColumn {
 	columnName: string;
-	tasks?: [];
+	tasks?: Array<Types.ObjectId>;
 }
