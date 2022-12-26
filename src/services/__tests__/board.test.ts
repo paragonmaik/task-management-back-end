@@ -13,7 +13,7 @@ describe('Board service', () => {
 	describe('Creates new board', () => {
 		it('tests whether a new board is created', async () => {
 			const createdBoard = await board.createNewBoard({
-				boardName: 'teste',
+				boardName: 'Donkey kong III',
 			});
 
 			console.log(createdBoard);
