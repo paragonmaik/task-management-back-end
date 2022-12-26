@@ -24,3 +24,10 @@ export const badUserExampleList2 = [
 		password: 'noworne',
 	},
 ];
+
+export const badBoardExampleList1 = [
+	{
+		boardName: '',
+	},
+	{},
+];
