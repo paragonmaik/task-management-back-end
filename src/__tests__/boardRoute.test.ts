@@ -13,11 +13,18 @@ describe('POST /board', () => {
 	});
 
 	it('tests a successful board creation request', async () => {
-		const boardResponse = await request(app).post('/board').send({
-			boardName: 'Donkey kong III',
+		const loginResponse = await request(app).post('/login').send({
+			email: 'donkey@example.com',
+			password: 'aquaticambience',
 		});
 
-		console.log(boardResponse.body);
+		const boardResponse = await request(app)
+			.post('/board')
+			.send({
+				boardName: 'Donkey kong III',
+			})
+			.set('Authorization', loginResponse.body.token);
+
 		expect(boardResponse.statusCode).toBe(StatusCodes.CREATED);
 		expect(boardResponse.body.columns).toBeDefined();
 		expect(boardResponse.body.boardName).toBe('Donkey kong III');

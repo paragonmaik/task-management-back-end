@@ -5,6 +5,6 @@ require('express-async-errors');
 
 const routers = express.Router();
 
-routers.post('/', board.createBoard);
+routers.post('/', authenticationMiddleware, board.createBoard);
 
 export default routers;
