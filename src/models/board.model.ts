@@ -12,6 +12,19 @@ export const boardSchema = new mongoose.Schema({
 			ref: 'Column',
 		},
 	],
+	members: [
+		{
+			userName: {
+				type: String,
+			},
+			email: {
+				type: String,
+			},
+			role: {
+				type: String,
+			},
+		},
+	],
 });
 
 export default mongoose.model<IBoard>('Board', boardSchema);
