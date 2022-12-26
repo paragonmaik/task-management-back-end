@@ -1,4 +1,4 @@
 export interface IColumn {
 	columnName: string;
-	taks: [];
+	tasks?: [];
 }
