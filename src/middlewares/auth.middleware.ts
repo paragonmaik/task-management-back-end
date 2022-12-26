@@ -9,10 +9,13 @@ export const authenticationMiddleware = async (
 	next: NextFunction
 ) => {
 	const token = req.headers.authorization;
+
 	if (!token) {
 		throw new HttpException(StatusCodes.UNAUTHORIZED, 'Token not found');
 	}
+
 	const payload = await authToken(token);
+
 	if (payload.status === 401) {
 		throw new HttpException(payload.status, payload.message);
 	}
