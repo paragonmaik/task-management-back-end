@@ -16,7 +16,6 @@ describe('Board service', () => {
 				boardName: 'Donkey kong III',
 			});
 
-			console.log(createdBoard);
 			expect(createdBoard).toBeTruthy();
 		});
 	});
