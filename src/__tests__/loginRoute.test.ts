@@ -47,7 +47,6 @@ describe('POST /login', () => {
 		for (const badUser of badUserExampleList2) {
 			const response = await request(app).post('/login').send(badUser);
 
-			console.log(response.body.message);
 			expect(response.statusCode).toBe(StatusCodes.BAD_REQUEST);
 			expect(response.body.message).toBeDefined();
 		}
