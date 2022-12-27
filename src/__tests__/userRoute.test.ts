@@ -8,7 +8,7 @@ import {
 	badUserExampleList1,
 } from '../services/__tests__/mocks/userMocks';
 
-describe('POST /user', () => {
+describe('/user ROUTE', () => {
 	beforeAll(async () => {
 		await testSetup();
 	});
@@ -17,27 +17,29 @@ describe('POST /user', () => {
 		await disconnectDB();
 	});
 
-	it('tests a successful user registration request', async () => {
-		const response = await request(app).post('/user').send(userExample1);
+	describe('POST /user', () => {
+		it('tests a successful user registration request', async () => {
+			const response = await request(app).post('/user').send(userExample1);
 
-		expect(response.statusCode).toBe(StatusCodes.CREATED);
-		expect(response.body.token).toBeDefined();
-	});
+			expect(response.statusCode).toBe(StatusCodes.CREATED);
+			expect(response.body.token).toBeDefined();
+		});
 
-	it('tests whether user is already registered', async () => {
-		const response = await request(app).post('/user').send(userExample1);
+		it('tests whether user is already registered', async () => {
+			const response = await request(app).post('/user').send(userExample1);
 
-		expect(response.statusCode).toBe(StatusCodes.CONFLICT);
-		expect(response.body.message).toBe('User already registered!');
-	});
+			expect(response.statusCode).toBe(StatusCodes.CONFLICT);
+			expect(response.body.message).toBe('User already registered!');
+		});
 
-	it('tests request with invalid body input', async () => {
-		for (const badUser of badUserExampleList1) {
-			const response = await request(app).post('/user').send(badUser);
+		it('tests request with invalid body input', async () => {
+			for (const badUser of badUserExampleList1) {
+				const response = await request(app).post('/user').send(badUser);
 
-			expect(response.statusCode).toBe(StatusCodes.BAD_REQUEST);
-			expect(response.body.message).toBeDefined();
-		}
+				expect(response.statusCode).toBe(StatusCodes.BAD_REQUEST);
+				expect(response.body.message).toBeDefined();
+			}
+		});
 	});
 
 	describe('DELETE /user/me', () => {
