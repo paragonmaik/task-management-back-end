@@ -14,5 +14,6 @@ routers.post(
 	board.createBoard
 );
 routers.get('/', authenticationMiddleware, board.getBoards);
+routers.get('/:id', authenticationMiddleware, board.getSingleBoard);
 
 export default routers;

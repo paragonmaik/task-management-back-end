@@ -13,9 +13,15 @@ export const createBoard = async (
 	res.status(StatusCodes.CREATED).json(createdBoard);
 };
 
-export const getBoards = async (req: Request, res: Response) => {
+export const getBoards = async (_req: Request, res: Response) => {
 	const { email } = res.locals.payload;
 	const boards = await board.getAllBoards(email);
 
 	res.status(StatusCodes.OK).json(boards);
+};
+
+export const getSingleBoard = async (req: Request, res: Response) => {
+	const singleBoard = await board.getBoardById(req.params.id);
+
+	res.status(StatusCodes.OK).json(singleBoard);
 };
