@@ -55,3 +55,20 @@ export const getBoardById = async (boardId: string) => {
 
 	return board;
 };
+
+export const updateBoardTitleById = async (
+	boardId: string,
+	boardName: string
+) => {
+	const board = await boardModel.findByIdAndUpdate(
+		boardId,
+		{ boardName },
+		{ new: true }
+	);
+
+	if (!board) {
+		throw new HttpException(StatusCodes.NOT_FOUND, 'Board does not exist!');
+	}
+
+	return board;
+};

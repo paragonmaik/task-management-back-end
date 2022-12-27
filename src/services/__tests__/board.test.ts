@@ -54,4 +54,23 @@ describe('Board service', () => {
 			expect(singleBoard.boardName).toBe(createdBoard.boardName);
 		});
 	});
+
+	describe('Update board', () => {
+		it('tests whether the selected board is updated', async () => {
+			const newBoardName = 'Donkey Kong V: Empire Strikes Back';
+			const createdBoard = await board.createNewBoard(
+				{
+					boardName: 'Donkey kong V',
+				},
+				userPayload
+			);
+
+			const updatedBoard = await board.updateBoardTitleById(
+				createdBoard.id,
+				newBoardName
+			);
+
+			expect(updatedBoard.boardName).toBe(newBoardName);
+		});
+	});
 });
