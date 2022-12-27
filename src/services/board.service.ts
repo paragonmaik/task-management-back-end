@@ -11,9 +11,10 @@ export const addBoardToUser = async (
 	boardId: Types.ObjectId
 ) => {
 	const user = await findUserByUniqueField('email', email);
-	if (!user) return;
 
-	user.boards?.unshift(boardId);
+	// if (!user) return;
+
+	user?.boards?.unshift(boardId);
 	await user?.save();
 };
 
