@@ -3,6 +3,8 @@ import { IBoard } from '../interfaces/IBoard';
 import { IJWTPayload } from '../interfaces/IJWTPayload';
 import { findUserByUniqueField } from './helpers/helpers';
 import { Types, Document } from 'mongoose';
+import { HttpException } from '../middlewares/HttpException';
+import { StatusCodes } from 'http-status-codes';
 
 export const addBoardToUser = async (
 	email: string,
@@ -43,4 +45,14 @@ export const getAllBoards = async (email: string) => {
 	});
 
 	return boards;
+};
+
+export const getBoardById = async (boardId: string) => {
+	const board = await boardModel.findById(boardId);
+
+	if (!board) {
+		throw new HttpException(StatusCodes.NOT_FOUND, 'Board does not exist!');
+	}
+
+	return board;
 };

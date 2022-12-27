@@ -37,4 +37,19 @@ describe('Board service', () => {
 			expect(boardsList.length).toBe(2);
 		});
 	});
+
+	describe('Get board', () => {
+		it('tests whether a board is returned', async () => {
+			const createdBoard = await board.createNewBoard(
+				{
+					boardName: 'Donkey kong V',
+				},
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
+
+			const singleBoard = await board.getBoardById(createdBoard.id);
+
+			expect(singleBoard.boardName).toBe(createdBoard.boardName);
+		});
+	});
 });
