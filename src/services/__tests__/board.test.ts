@@ -1,6 +1,8 @@
 import * as board from '../board.service';
 import { disconnectDB, testSetup } from '../../database/connection';
 
+const userPayload = { userName: 'donkeykong', email: 'donkey@example.com' };
+
 describe('Board service', () => {
 	beforeAll(async () => {
 		await testSetup();
@@ -16,7 +18,7 @@ describe('Board service', () => {
 				{
 					boardName: 'Donkey kong III',
 				},
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 
 			expect(createdBoard).toBeTruthy();
@@ -29,7 +31,7 @@ describe('Board service', () => {
 				{
 					boardName: 'Donkey kong IV',
 				},
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 
 			const boardsList = await board.getAllBoards('donkey@example.com');
@@ -44,7 +46,7 @@ describe('Board service', () => {
 				{
 					boardName: 'Donkey kong V',
 				},
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 
 			const singleBoard = await board.getBoardById(createdBoard.id);
