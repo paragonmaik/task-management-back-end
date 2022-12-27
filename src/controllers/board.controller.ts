@@ -12,3 +12,10 @@ export const createBoard = async (
 
 	res.status(StatusCodes.CREATED).json(createdBoard);
 };
+
+export const getBoards = async (req: Request, res: Response) => {
+	const { email } = res.locals.payload;
+	const boards = await board.getAllBoards(email);
+
+	res.status(StatusCodes.OK).json(boards);
+};

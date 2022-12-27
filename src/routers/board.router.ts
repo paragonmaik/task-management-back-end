@@ -13,5 +13,6 @@ routers.post(
 	validateSchema(BoardSchema),
 	board.createBoard
 );
+routers.get('/', authenticationMiddleware, board.getBoards);
 
 export default routers;
