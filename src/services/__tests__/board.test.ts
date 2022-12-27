@@ -22,4 +22,19 @@ describe('Board service', () => {
 			expect(createdBoard).toBeTruthy();
 		});
 	});
+
+	describe("Get all user's board", () => {
+		it('tests whether a list of all boards are returned', async () => {
+			await board.createNewBoard(
+				{
+					boardName: 'Donkey kong IV',
+				},
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
+
+			const boardsList = await board.getAllBoards('donkey@example.com');
+
+			expect(boardsList.length).toBe(2);
+		});
+	});
 });

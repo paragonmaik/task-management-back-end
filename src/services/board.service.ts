@@ -36,3 +36,11 @@ export const createNewBoard = async (
 
 	return createdBoard;
 };
+
+export const getAllBoards = async (email: string) => {
+	const boards = await boardModel.find({
+		members: { $elemMatch: { email } },
+	});
+
+	return boards;
+};
