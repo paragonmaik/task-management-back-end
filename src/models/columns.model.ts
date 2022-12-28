@@ -12,6 +12,10 @@ export const columnSchema = new mongoose.Schema({
 			ref: 'Task',
 		},
 	],
+	ownerBoard: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Board',
+	},
 });
 
 export default mongoose.model<IColumn>('Column', columnSchema);
