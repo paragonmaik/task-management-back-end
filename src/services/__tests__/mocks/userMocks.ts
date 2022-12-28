@@ -31,3 +31,9 @@ export const badBoardExampleList1 = [
 	},
 	{},
 ];
+export const badColumnExampleList1 = [
+	{
+		columnName: '',
+	},
+	{},
+];
