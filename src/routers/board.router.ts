@@ -15,5 +15,11 @@ routers.post(
 );
 routers.get('/', authenticationMiddleware, board.getBoards);
 routers.get('/:id', authenticationMiddleware, board.getSingleBoard);
+routers.put(
+	'/:id',
+	authenticationMiddleware,
+	validateSchema(BoardSchema),
+	board.updateBoardTitle
+);
 
 export default routers;

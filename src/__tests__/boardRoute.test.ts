@@ -85,4 +85,46 @@ describe('/board ROUTE', () => {
 			expect(boardResponse.body.boardName).toBe(createdBoard.boardName);
 		});
 	});
+
+	describe('PUT /board/id', () => {
+		it('tests whether board title is updated', async () => {
+			const requestBody = { boardName: 'Donkey Kong V: Empire Strikes Back' };
+			const loginResponse = await request(app).post('/login').send(loginData);
+
+			const createdBoard = await board.createNewBoard(
+				{
+					boardName: 'Donkey kong V',
+				},
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
+
+			const boardResponse = await request(app)
+				.put(`/board/${createdBoard.id}`)
+				.send(requestBody)
+				.set('Authorization', loginResponse.body.token);
+
+			expect(boardResponse.statusCode).toBe(StatusCodes.OK);
+			expect(boardResponse.body.boardName).toBe(requestBody.boardName);
+		});
+
+		it('tests request with invalid body input', async () => {
+			const loginResponse = await request(app).post('/login').send(loginData);
+			const createdBoard = await board.createNewBoard(
+				{
+					boardName: 'Donkey kong V',
+				},
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
+
+			for (const badBoard of badBoardExampleList1) {
+				const boardResponse = await request(app)
+					.put(`/board/${createdBoard.id}`)
+					.send(badBoard)
+					.set('Authorization', loginResponse.body.token);
+
+				expect(boardResponse.statusCode).toBe(StatusCodes.BAD_REQUEST);
+				expect(boardResponse.body.message).toBeDefined();
+			}
+		});
+	});
 });

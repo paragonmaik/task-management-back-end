@@ -25,3 +25,12 @@ export const getSingleBoard = async (req: Request, res: Response) => {
 
 	res.status(StatusCodes.OK).json(singleBoard);
 };
+
+export const updateBoardTitle = async (req: Request, res: Response) => {
+	const updatedBoard = await board.updateBoardTitleById(
+		req.params.id,
+		req.body.boardName
+	);
+
+	res.status(StatusCodes.OK).json(updatedBoard);
+};
