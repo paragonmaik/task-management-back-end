@@ -13,3 +13,12 @@ export const getColumns = async (req: Request, res: Response) => {
 
 	res.status(StatusCodes.OK).json(columnsList);
 };
+
+export const updateColumnTitle = async (req: Request, res: Response) => {
+	const updatedColumn = await column.updateColumnTitleById(
+		req.params.columnId,
+		req.body.columnName
+	);
+
+	res.status(StatusCodes.OK).json(updatedColumn);
+};

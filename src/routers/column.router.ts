@@ -14,5 +14,6 @@ routers.post(
 	column.createColumn
 );
 routers.get('/:id', authenticationMiddleware, column.getColumns);
+routers.put('/:columnId', column.updateColumnTitle);
 
 export default routers;

@@ -92,4 +92,31 @@ describe('/column ROUTE', () => {
 			}
 		});
 	});
+
+	describe('PUT /column/columnId', () => {
+		it('tests whether column title is updated', async () => {
+			const requestBody = { columnName: 'Done' };
+			const loginResponse = await request(app).post('/login').send(loginData);
+
+			const createdBoard = await board.createNewBoard(
+				{
+					boardName: 'Donkey kong VII',
+				},
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
+
+			const createdColumn = await column.createNewColumn(
+				columnData,
+				createdBoard.id
+			);
+
+			const columnResponse = await request(app)
+				.put(`/column/${createdColumn.id}`)
+				.send(requestBody)
+				.set('Authorization', loginResponse.body.token);
+
+			expect(columnResponse.statusCode).toBe(StatusCodes.OK);
+			expect(columnResponse.body.columnName).toBe(requestBody.columnName);
+		});
+	});
 });
