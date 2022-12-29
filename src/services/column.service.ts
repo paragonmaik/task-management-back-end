@@ -14,3 +14,11 @@ export const createNewColumn = async (column: IColumn, boardId: string) => {
 
 	return createdColumn;
 };
+
+export const getColumnsByBoardId = async (boardId: string) => {
+	const columnsList = await columnModel.find({
+		ownerBoard: { $in: boardId },
+	});
+
+	return columnsList;
+};
