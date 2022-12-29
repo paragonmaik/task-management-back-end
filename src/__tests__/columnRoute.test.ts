@@ -1,8 +1,9 @@
 import request from 'supertest';
 import app from '../app';
+import * as board from '../services/board.service';
+import * as column from '../services/column.service';
 import { disconnectDB, testSetup } from '../database/connection';
 import { StatusCodes } from 'http-status-codes';
-import * as board from '../services/board.service';
 import { badColumnExampleList1 } from '../services/__tests__/mocks/userMocks';
 
 const loginData = {
@@ -63,5 +64,32 @@ describe('/column ROUTE', () => {
 			}
 		});
 	});
+
+	describe('GET /column/id', () => {
+		it('tests whether all columns are returned', async () => {
+			const loginResponse = await request(app).post('/login').send(loginData);
+			const createdBoard = await board.createNewBoard(
+				{
+					boardName: 'Donkey kong VI',
+				},
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
+
+			await column.createNewColumn({ columnName: 'To do' }, createdBoard.id);
+			await column.createNewColumn(
+				{ columnName: 'In review' },
+				createdBoard.id
+			);
+
+			const columnsResponse = await request(app)
+				.get(`/column/${createdBoard.id}`)
+				.set('Authorization', loginResponse.body.token);
+
+			expect(columnsResponse.statusCode).toBe(StatusCodes.OK);
+
+			for (const column of columnsResponse.body) {
+				expect(column.ownerBoard).toBe(createdBoard.id);
+			}
+		});
+	});
 });
-//

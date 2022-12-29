@@ -7,3 +7,9 @@ export const createColumn = async (req: Request, res: Response) => {
 
 	res.status(StatusCodes.CREATED).json(createdColumn);
 };
+
+export const getColumns = async (req: Request, res: Response) => {
+	const columnsList = await column.getColumnsByBoardId(req.params.id);
+
+	res.status(StatusCodes.OK).json(columnsList);
+};
