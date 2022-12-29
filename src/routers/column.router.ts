@@ -13,6 +13,6 @@ routers.post(
 	validateSchema(ColumnSchema),
 	column.createColumn
 );
-routers.get('/:id', column.getColumns);
+routers.get('/:id', authenticationMiddleware, column.getColumns);
 
 export default routers;
