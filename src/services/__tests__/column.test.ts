@@ -51,4 +51,27 @@ describe('Column service', () => {
 			expect(columnsList.length).toBe(2);
 		});
 	});
+
+	describe('Update column', () => {
+		it('tests whether the selected column is updated', async () => {
+			const newColumnName = 'Done';
+			const createdBoard = await board.createNewBoard(
+				{
+					boardName: 'Donkey kong V',
+				},
+				userPayload
+			);
+			const createdColumn = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+
+			const updatedColumn = await column.updateColumnTitleById(
+				createdColumn.id,
+				newColumnName
+			);
+
+			expect(updatedColumn.columnName).toBe(newColumnName);
+		});
+	});
 });

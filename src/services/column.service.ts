@@ -1,5 +1,7 @@
 import columnModel from '../models/columns.model';
 import boardModel from '../models/board.model';
+import { HttpException } from '../middlewares/HttpException';
+import { StatusCodes } from 'http-status-codes';
 import { IColumn } from '../interfaces/IColumn';
 
 export const createNewColumn = async (column: IColumn, boardId: string) => {
@@ -21,4 +23,21 @@ export const getColumnsByBoardId = async (boardId: string) => {
 	});
 
 	return columnsList;
+};
+
+export const updateColumnTitleById = async (
+	columnId: string,
+	columnName: string
+) => {
+	const column = await columnModel.findByIdAndUpdate(
+		columnId,
+		{ columnName },
+		{ new: true }
+	);
+
+	if (!column) {
+		throw new HttpException(StatusCodes.NOT_FOUND, 'Board does not exist!');
+	}
+
+	return column;
 };
