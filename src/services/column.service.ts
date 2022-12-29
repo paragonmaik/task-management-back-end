@@ -36,7 +36,7 @@ export const updateColumnTitleById = async (
 	);
 
 	if (!column) {
-		throw new HttpException(StatusCodes.NOT_FOUND, 'Board does not exist!');
+		throw new HttpException(StatusCodes.NOT_FOUND, 'Column does not exist!');
 	}
 
 	return column;
