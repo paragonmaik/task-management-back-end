@@ -12,6 +12,10 @@ export const taskSchema = new mongoose.Schema({
 			ref: 'SubTask',
 		},
 	],
+	ownerColumn: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Column',
+	},
 });
 
 export default mongoose.model<ITask>('Task', taskSchema);
