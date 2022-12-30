@@ -2,6 +2,7 @@ import request from 'supertest';
 import app from '../app';
 import * as board from '../services/board.service';
 import * as column from '../services/column.service';
+import * as task from '../services/task.service';
 import { disconnectDB, testSetup } from '../database/connection';
 import { StatusCodes } from 'http-status-codes';
 import { badTaskExampleList1 } from '../services/__tests__/mocks/userMocks';
@@ -65,6 +66,33 @@ describe('/task ROUTE', () => {
 
 				expect(columnResponse.statusCode).toBe(StatusCodes.BAD_REQUEST);
 				expect(columnResponse.body.message).toBeDefined();
+			}
+		});
+	});
+
+	describe('GET /task/columnId', () => {
+		it('tests whether all tasks are returned', async () => {
+			const loginResponse = await request(app).post('/login').send(loginData);
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong VI' },
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
+
+			const createdColumn = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+
+			await task.createNewTask(taskData, createdColumn.id);
+
+			const taskResponse = await request(app)
+				.get(`/task/${createdColumn.id}`)
+				.set('Authorization', loginResponse.body.token);
+
+			expect(taskResponse.statusCode).toBe(StatusCodes.OK);
+
+			for (const task of taskResponse.body) {
+				expect(task.ownerColumn).toBe(createdColumn.id);
 			}
 		});
 	});

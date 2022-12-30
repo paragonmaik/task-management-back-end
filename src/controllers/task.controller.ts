@@ -7,3 +7,9 @@ export const createTask = async (req: Request, res: Response) => {
 
 	res.status(StatusCodes.CREATED).json(createdTask);
 };
+
+export const getTasks = async (req: Request, res: Response) => {
+	const tasksList = await task.getTaskByColumnId(req.params.columnId);
+
+	res.status(StatusCodes.OK).json(tasksList);
+};
