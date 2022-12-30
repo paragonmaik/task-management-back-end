@@ -14,3 +14,11 @@ export const createNewTask = async (task: ITask, columnId: string) => {
 
 	return createdTask;
 };
+
+export const getTaskByColumnId = async (columnId: string) => {
+	const tasksList = await tasksModel.find({
+		ownerColumn: { $in: columnId },
+	});
+
+	return tasksList;
+};

@@ -18,9 +18,7 @@ describe('Column service', () => {
 	describe('Creates new task', () => {
 		it('tests whether a new task is created', async () => {
 			const createdBoard = await board.createNewBoard(
-				{
-					boardName: 'Donkey kong III',
-				},
+				{ boardName: 'Donkey kong III' },
 				userPayload
 			);
 
@@ -32,6 +30,27 @@ describe('Column service', () => {
 			const createdTask = await task.createNewTask(taskData, createdColumn.id);
 
 			expect(createdTask).toBeTruthy();
+		});
+	});
+
+	describe('Get all tasks', () => {
+		it('tests whether a list of all tasks are returned', async () => {
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong III' },
+				userPayload
+			);
+
+			const createdColumn = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+
+			await task.createNewTask(taskData, createdColumn.id);
+			await task.createNewTask(taskData, createdColumn.id);
+
+			const tasksList = await task.getTaskByColumnId(createdColumn.id);
+
+			expect(tasksList.length).toBe(2);
 		});
 	});
 });
