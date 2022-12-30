@@ -99,9 +99,7 @@ describe('/column ROUTE', () => {
 			const loginResponse = await request(app).post('/login').send(loginData);
 
 			const createdBoard = await board.createNewBoard(
-				{
-					boardName: 'Donkey kong VII',
-				},
+				{ boardName: 'Donkey kong VII' },
 				{ userName: 'donkeykong', email: 'donkey@example.com' }
 			);
 
