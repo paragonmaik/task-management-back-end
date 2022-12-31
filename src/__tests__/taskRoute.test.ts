@@ -16,6 +16,8 @@ const taskData = {
 	description: 'Beat all of the donkey kong games',
 };
 
+const columnData = { columnName: 'To do' };
+
 describe('/task ROUTE', () => {
 	beforeAll(async () => {
 		await testSetup();
@@ -33,7 +35,7 @@ describe('/task ROUTE', () => {
 				{ userName: 'donkeykong', email: 'donkey@example.com' }
 			);
 			const createdColumn = await column.createNewColumn(
-				{ columnName: 'To do' },
+				columnData,
 				createdBoard.id
 			);
 
@@ -54,7 +56,7 @@ describe('/task ROUTE', () => {
 				{ userName: 'donkeykong', email: 'donkey@example.com' }
 			);
 			const createdColumn = await column.createNewColumn(
-				{ columnName: 'To do' },
+				columnData,
 				createdBoard.id
 			);
 
@@ -79,7 +81,7 @@ describe('/task ROUTE', () => {
 			);
 
 			const createdColumn = await column.createNewColumn(
-				{ columnName: 'To do' },
+				columnData,
 				createdBoard.id
 			);
 
@@ -94,6 +96,33 @@ describe('/task ROUTE', () => {
 			for (const task of taskResponse.body) {
 				expect(task.ownerColumn).toBe(createdColumn.id);
 			}
+		});
+	});
+
+	describe('PUT /task/taskId', () => {
+		it('tests whether task description is updated', async () => {
+			const requestBody = { description: '100% all donkey kong games' };
+			const loginResponse = await request(app).post('/login').send(loginData);
+
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong VII' },
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
+
+			const createdColumn = await column.createNewColumn(
+				columnData,
+				createdBoard.id
+			);
+
+			const createdTask = await task.createNewTask(taskData, createdColumn.id);
+
+			const taskResponse = await request(app)
+				.put(`/task/${createdTask.id}`)
+				.send(requestBody)
+				.set('Authorization', loginResponse.body.token);
+
+			expect(taskResponse.statusCode).toBe(StatusCodes.OK);
+			expect(taskResponse.body.description).toBe(requestBody.description);
 		});
 	});
 });

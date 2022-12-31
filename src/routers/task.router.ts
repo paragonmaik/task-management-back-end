@@ -14,4 +14,11 @@ routers.post(
 	task.createTask
 );
 routers.get('/:columnId', authenticationMiddleware, task.getTasks);
+routers.put(
+	'/:taskId',
+	authenticationMiddleware,
+	validateSchema(TaskSchema),
+	task.updateTaskDescription
+);
+
 export default routers;

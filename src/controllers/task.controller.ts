@@ -13,3 +13,12 @@ export const getTasks = async (req: Request, res: Response) => {
 
 	res.status(StatusCodes.OK).json(tasksList);
 };
+
+export const updateTaskDescription = async (req: Request, res: Response) => {
+	const updatedTask = await task.updateDescriptionById(
+		req.params.taskId,
+		req.body.description
+	);
+
+	res.status(StatusCodes.OK).json(updatedTask);
+};
