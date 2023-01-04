@@ -6,17 +6,14 @@ import { Types, Document } from 'mongoose';
 import { HttpException } from '../middlewares/HttpException';
 import { StatusCodes } from 'http-status-codes';
 
-export const addBoardToUser = async (
-	email: string,
-	boardId: Types.ObjectId
-) => {
+const addBoardToUser = async (email: string, boardId: Types.ObjectId) => {
 	const user = await findUserByUniqueField('email', email);
 
 	user?.boards?.unshift(boardId);
 	await user?.save();
 };
 
-export const addUserToBoard = async (
+const addUserToBoard = async (
 	board: Document<unknown, any, IBoard> & IBoard & { _id: Types.ObjectId },
 	userPayload: IJWTPayload
 ) => {
