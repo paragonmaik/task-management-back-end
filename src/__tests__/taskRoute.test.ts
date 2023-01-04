@@ -27,7 +27,7 @@ describe('/task ROUTE', () => {
 		await disconnectDB();
 	});
 
-	describe('POST /task', () => {
+	describe('POST /task/columnId', () => {
 		it('tests a successful task creation request', async () => {
 			const loginResponse = await request(app).post('/login').send(loginData);
 			const createdBoard = await board.createNewBoard(
