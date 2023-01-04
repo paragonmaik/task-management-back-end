@@ -36,7 +36,7 @@ export const updateDescriptionById = async (
 	);
 
 	if (!task) {
-		throw new HttpException(StatusCodes.NOT_FOUND, 'Column does not exist!');
+		throw new HttpException(StatusCodes.NOT_FOUND, 'Task does not exist!');
 	}
 
 	return task;
