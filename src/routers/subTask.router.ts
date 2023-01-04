@@ -18,5 +18,11 @@ routers.get(
 	// authenticationMiddleware,
 	subTask.getSubTasks
 );
+routers.put(
+	'/:subTaskId',
+	// authenticationMiddleware,
+	validateSchema(TaskSchema),
+	subTask.updateSubTaskDescription
+);
 
 export default routers;

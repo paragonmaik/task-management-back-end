@@ -16,3 +16,12 @@ export const getSubTasks = async (req: Request, res: Response) => {
 
 	res.status(StatusCodes.OK).json(tasksList);
 };
+
+export const updateSubTaskDescription = async (req: Request, res: Response) => {
+	const updatedTask = await subTask.updateDescriptionById(
+		req.params.subTaskId,
+		req.body.description
+	);
+
+	res.status(StatusCodes.OK).json(updatedTask);
+};

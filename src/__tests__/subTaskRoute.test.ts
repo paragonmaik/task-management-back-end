@@ -111,4 +111,36 @@ describe('/subTask ROUTE', () => {
 			}
 		});
 	});
+
+	describe('PUT /subtask/subTaskId', () => {
+		it('tests whether subTask description is updated', async () => {
+			const requestBody = { description: 'speedrun all donkey kong games' };
+			const loginResponse = await request(app).post('/login').send(loginData);
+
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong VII' },
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
+
+			const createdColumn = await column.createNewColumn(
+				columnData,
+				createdBoard.id
+			);
+
+			const createdTask = await task.createNewTask(taskData, createdColumn.id);
+
+			const createdSubTask = await subTask.createNewSubTask(
+				subTaskData,
+				createdTask.id
+			);
+
+			const subTaskResponse = await request(app)
+				.put(`/subtask/${createdSubTask.id}`)
+				.send(requestBody)
+				.set('Authorization', loginResponse.body.token);
+
+			expect(subTaskResponse.statusCode).toBe(StatusCodes.OK);
+			expect(subTaskResponse.body.description).toBe(requestBody.description);
+		});
+	});
 });
