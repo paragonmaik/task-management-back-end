@@ -7,6 +7,7 @@ import { disconnectDB, testSetup } from '../../database/connection';
 const userPayload = { userName: 'donkeykong', email: 'donkey@example.com' };
 const taskData = { description: 'Beat all of the donkey kong games.' };
 const subTaskData = { description: '100% all of the donkey kong games' };
+const newSubTaskDescription = 'speedrun all donkey kong games.';
 
 describe('Board service', () => {
 	beforeAll(async () => {
@@ -60,6 +61,35 @@ describe('Board service', () => {
 			const subTaskList = await subTask.getSubTaskByTaskId(createdTask.id);
 
 			expect(subTaskList.length).toBe(2);
+		});
+	});
+
+	describe('Update subtask', () => {
+		it('tests whether the selected subtask is updated', async () => {
+			const createdBoard = await board.createNewBoard(
+				{
+					boardName: 'Donkey kong V',
+				},
+				userPayload
+			);
+			const createdColumn = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+
+			const createdTask = await task.createNewTask(taskData, createdColumn.id);
+
+			const createdSubTask = await subTask.createNewSubTask(
+				subTaskData,
+				createdTask.id
+			);
+
+			const updateSubTask = await subTask.updateDescriptionById(
+				createdSubTask.id,
+				newSubTaskDescription
+			);
+
+			expect(updateSubTask.description).toBe(newSubTaskDescription);
 		});
 	});
 });
