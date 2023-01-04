@@ -39,4 +39,27 @@ describe('Board service', () => {
 			expect(createdSubTask).toBeTruthy();
 		});
 	});
+
+	describe('Get all subtasks', () => {
+		it('tests whether a list of all subtasks are returned', async () => {
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong III' },
+				userPayload
+			);
+
+			const createdColumn = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+
+			const createdTask = await task.createNewTask(taskData, createdColumn.id);
+
+			await subTask.createNewSubTask(subTaskData, createdTask.id);
+			await subTask.createNewSubTask(subTaskData, createdTask.id);
+
+			const subTaskList = await subTask.getSubTaskByTaskId(createdTask.id);
+
+			expect(subTaskList.length).toBe(2);
+		});
+	});
 });

@@ -14,3 +14,11 @@ export const createNewSubTask = async (subTask: ISubTask, taskId: string) => {
 
 	return createdSubTask;
 };
+
+export const getSubTaskByTaskId = async (taskId: string) => {
+	const tasksList = await subTasksModel.find({
+		ownerTask: { $in: taskId },
+	});
+
+	return tasksList;
+};
