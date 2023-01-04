@@ -45,3 +45,10 @@ export const badTaskExampleList1 = [
 	},
 	{},
 ];
+
+export const badSubTaskExampleList1 = [
+	{
+		description: '',
+	},
+	{},
+];
