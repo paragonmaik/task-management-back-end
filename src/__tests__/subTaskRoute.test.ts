@@ -3,6 +3,7 @@ import app from '../app';
 import * as board from '../services/board.service';
 import * as column from '../services/column.service';
 import * as task from '../services/task.service';
+import * as subTask from '../services/subTask.service';
 import { disconnectDB, testSetup } from '../database/connection';
 import { StatusCodes } from 'http-status-codes';
 import { badSubTaskExampleList1 } from '../services/__tests__/mocks/userMocks';
@@ -77,6 +78,36 @@ describe('/subTask ROUTE', () => {
 
 				expect(subTaskResponse.statusCode).toBe(StatusCodes.BAD_REQUEST);
 				expect(subTaskResponse.body.message).toBeDefined();
+			}
+		});
+	});
+
+	describe('GET /subtask/taskId', () => {
+		it('tests whether all subtasks are returned', async () => {
+			const loginResponse = await request(app).post('/login').send(loginData);
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong VI' },
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
+
+			const createdColumn = await column.createNewColumn(
+				columnData,
+				createdBoard.id
+			);
+
+			const createdTask = await task.createNewTask(taskData, createdColumn.id);
+
+			await subTask.createNewSubTask(subTaskData, createdTask.id);
+			await subTask.createNewSubTask(subTaskData, createdTask.id);
+
+			const subTaskResponse = await request(app)
+				.get(`/subtask/${createdTask.id}`)
+				.set('Authorization', loginResponse.body.token);
+
+			expect(subTaskResponse.statusCode).toBe(StatusCodes.OK);
+
+			for (const subTask of subTaskResponse.body) {
+				expect(subTask.ownerTask).toBe(createdTask.id);
 			}
 		});
 	});

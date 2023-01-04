@@ -13,5 +13,10 @@ routers.post(
 	validateSchema(TaskSchema),
 	subTask.createSubTask
 );
+routers.get(
+	'/:taskId',
+	// authenticationMiddleware,
+	subTask.getSubTasks
+);
 
 export default routers;

@@ -10,3 +10,9 @@ export const createSubTask = async (req: Request, res: Response) => {
 
 	res.status(StatusCodes.CREATED).json(createdSubTask);
 };
+
+export const getSubTasks = async (req: Request, res: Response) => {
+	const tasksList = await subTask.getSubTaskByTaskId(req.params.taskId);
+
+	res.status(StatusCodes.OK).json(tasksList);
+};
