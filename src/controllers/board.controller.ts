@@ -34,3 +34,12 @@ export const updateBoardTitle = async (req: Request, res: Response) => {
 
 	res.status(StatusCodes.OK).json(updatedBoard);
 };
+
+export const updateBoardColumns = async (req: Request, res: Response) => {
+	const updatedBoard = await board.updateBoardColumnsOrder(
+		req.params.boardId,
+		req.body.columns
+	);
+
+	res.status(StatusCodes.OK).json(updatedBoard);
+};

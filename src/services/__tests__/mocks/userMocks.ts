@@ -52,3 +52,10 @@ export const badSubTaskExampleList1 = [
 	},
 	{},
 ];
+
+export const badBoardColumnsExampleList1 = [
+	{
+		columns: [],
+	},
+	{},
+];

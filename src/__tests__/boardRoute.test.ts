@@ -2,8 +2,12 @@ import request from 'supertest';
 import app from '../app';
 import { disconnectDB, testSetup } from '../database/connection';
 import { StatusCodes } from 'http-status-codes';
-import { badBoardExampleList1 } from '../services/__tests__/mocks/userMocks';
+import {
+	badBoardExampleList1,
+	badBoardColumnsExampleList1,
+} from '../services/__tests__/mocks/userMocks';
 import * as board from '../services/board.service';
+import * as column from '../services/column.service';
 
 const loginData = {
 	email: 'donkey@example.com',
@@ -120,6 +124,52 @@ describe('/board ROUTE', () => {
 				const boardResponse = await request(app)
 					.put(`/board/${createdBoard.id}`)
 					.send(badBoard)
+					.set('Authorization', loginResponse.body.token);
+
+				expect(boardResponse.statusCode).toBe(StatusCodes.BAD_REQUEST);
+				expect(boardResponse.body.message).toBeDefined();
+			}
+		});
+	});
+
+	describe('PUT /board/boardId', () => {
+		it('tests whether board columns list is updated', async () => {
+			const loginResponse = await request(app).post('/login').send(loginData);
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong V' },
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
+			const createdColumn1 = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+			const createdColumn2 = await column.createNewColumn(
+				{ columnName: 'In review' },
+				createdBoard.id
+			);
+
+			const requestBody = { columns: [createdColumn2._id, createdColumn1._id] };
+			const { body, statusCode } = await request(app)
+				.put(`/board/columns/${createdBoard.id}`)
+				.send(requestBody)
+				.set('Authorization', loginResponse.body.token);
+
+			expect(statusCode).toBe(StatusCodes.OK);
+			expect(body.columns[0]).toEqual(requestBody.columns[0].toString());
+			expect(body.columns[1]).toEqual(requestBody.columns[1].toString());
+		});
+
+		it('tests request with invalid body input', async () => {
+			const loginResponse = await request(app).post('/login').send(loginData);
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong V' },
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
+
+			for (const badBoardColumns of badBoardColumnsExampleList1) {
+				const boardResponse = await request(app)
+					.put(`/board/columns/${createdBoard.id}`)
+					.send(badBoardColumns)
 					.set('Authorization', loginResponse.body.token);
 
 				expect(boardResponse.statusCode).toBe(StatusCodes.BAD_REQUEST);
