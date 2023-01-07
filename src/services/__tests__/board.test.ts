@@ -1,4 +1,5 @@
 import * as board from '../board.service';
+import * as column from '../column.service';
 import { disconnectDB, testSetup } from '../../database/connection';
 
 const userPayload = { userName: 'donkeykong', email: 'donkey@example.com' };
@@ -55,7 +56,7 @@ describe('Board service', () => {
 		});
 	});
 
-	describe('Update board', () => {
+	describe('Update board title', () => {
 		it('tests whether the selected board is updated', async () => {
 			const newBoardName = 'Donkey Kong V: Empire Strikes Back';
 			const createdBoard = await board.createNewBoard(
@@ -71,6 +72,35 @@ describe('Board service', () => {
 			);
 
 			expect(updatedBoard.boardName).toBe(newBoardName);
+		});
+	});
+
+	describe('Update board columns list', () => {
+		it('tests whether the selected board is updated', async () => {
+			const createdBoard = await board.createNewBoard(
+				{
+					boardName: 'Donkey kong V',
+				},
+				userPayload
+			);
+
+			const createdColumn1 = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+			const createdColumn2 = await column.createNewColumn(
+				{ columnName: 'In review' },
+				createdBoard.id
+			);
+
+			const sortedColumnsList = [createdColumn2._id, createdColumn1._id];
+
+			const updatedBoard = await board.updateBoardColumnsOrder(
+				createdBoard.id,
+				sortedColumnsList
+			);
+
+			expect(updatedBoard.columns).toBeDefined();
 		});
 	});
 });

@@ -69,3 +69,20 @@ export const updateBoardTitleById = async (
 
 	return board;
 };
+
+export const updateBoardColumnsOrder = async (
+	boardId: string,
+	boardColums: Types.ObjectId[]
+) => {
+	const board = await boardModel.findByIdAndUpdate(
+		boardId,
+		{ columns: boardColums },
+		{ new: true }
+	);
+
+	if (!board) {
+		throw new HttpException(StatusCodes.NOT_FOUND, 'Board does not exist!');
+	}
+
+	return board;
+};
