@@ -132,7 +132,7 @@ describe('/board ROUTE', () => {
 		});
 	});
 
-	describe('PUT /board/boardId', () => {
+	describe('PUT /board/columns/boardId', () => {
 		it('tests whether board columns list is updated', async () => {
 			const loginResponse = await request(app).post('/login').send(loginData);
 			const createdBoard = await board.createNewBoard(
