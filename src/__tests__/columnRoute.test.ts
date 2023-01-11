@@ -2,10 +2,13 @@ import request from 'supertest';
 import app from '../app';
 import * as board from '../services/board.service';
 import * as column from '../services/column.service';
+import * as task from '../services/task.service';
 import { disconnectDB, testSetup } from '../database/connection';
 import { StatusCodes } from 'http-status-codes';
 import { badColumnExampleList1 } from '../services/__tests__/mocks/userMocks';
 
+const taskData1 = { description: 'First task' };
+const taskData2 = { description: 'Second task' };
 const loginData = {
 	email: 'donkey@example.com',
 	password: 'aquaticambience',
@@ -115,6 +118,69 @@ describe('/column ROUTE', () => {
 
 			expect(columnResponse.statusCode).toBe(StatusCodes.OK);
 			expect(columnResponse.body.columnName).toBe(requestBody.columnName);
+		});
+	});
+
+	describe('PUT /column/tasks', () => {
+		it('tests whether column tasks are updated', async () => {
+			const loginResponse = await request(app).post('/login').send(loginData);
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong V' },
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
+			const createdColumn1 = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+
+			const createdTask1 = await task.createNewTask(
+				taskData1,
+				createdColumn1.id
+			);
+			const createdTask2 = await task.createNewTask(
+				taskData2,
+				createdColumn1.id
+			);
+
+			createdColumn1.tasks = [createdTask2.id, createdTask1.id];
+
+			const requestBody = { updatedColumns: [createdColumn1] };
+
+			const { body, statusCode } = await request(app)
+				.put(`/column/tasks/${createdBoard._id}`)
+				.send(requestBody)
+				.set('Authorization', loginResponse.body.token);
+
+			expect(statusCode).toBe(StatusCodes.OK);
+			expect(body[0].tasks).toBeDefined();
+		});
+
+		it('tests request with invalid body input', async () => {
+			const loginResponse = await request(app).post('/login').send(loginData);
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong V' },
+				{ userName: 'donkeykong', email: 'donkey@example.com' }
+			);
+
+			const createdColumn1 = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+
+			const createdTask1 = await task.createNewTask(
+				taskData1,
+				createdColumn1.id
+			);
+
+			createdColumn1.tasks = [createdTask1.id];
+
+			const { body, statusCode } = await request(app)
+				.put(`/column/tasks/${createdBoard._id}`)
+				.send({ updatedColumns: [] })
+				.set('Authorization', loginResponse.body.token);
+
+			expect(statusCode).toBe(StatusCodes.BAD_REQUEST);
+			expect(body.message).toBeDefined();
 		});
 	});
 });

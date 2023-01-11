@@ -3,22 +3,33 @@ import * as column from '../controllers/column.controller';
 import { authenticationMiddleware } from '../middlewares/auth.middleware';
 import { validateSchema } from '../middlewares/validateSchema';
 import { ColumnSchema } from '../middlewares/joiSchemas/column.schema';
+import { ColumnTasksSchema } from '../middlewares/joiSchemas/columnTasks.schema';
 require('express-async-errors');
 
 const routers = express.Router();
 
 routers.post(
 	'/:id',
-	authenticationMiddleware,
+	// authenticationMiddleware,
 	validateSchema(ColumnSchema),
 	column.createColumn
 );
-routers.get('/:id', authenticationMiddleware, column.getColumns);
+routers.get(
+	'/:id',
+	// authenticationMiddleware,
+	column.getColumns
+);
 routers.put(
 	'/:columnId',
-	authenticationMiddleware,
+	// authenticationMiddleware,
 	validateSchema(ColumnSchema),
 	column.updateColumnTitle
+);
+routers.put(
+	'/tasks/:boardId',
+	// authenticationMiddleware,
+	validateSchema(ColumnTasksSchema),
+	column.updateColumnTasks
 );
 
 export default routers;

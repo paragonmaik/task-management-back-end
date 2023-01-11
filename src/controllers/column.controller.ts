@@ -22,3 +22,11 @@ export const updateColumnTitle = async (req: Request, res: Response) => {
 
 	res.status(StatusCodes.OK).json(updatedColumn);
 };
+
+export const updateColumnTasks = async (req: Request, res: Response) => {
+	const updatedColumn = await column.updateColumnTasksOrder(
+		req.body.updatedColumns
+	);
+
+	res.status(StatusCodes.OK).json(updatedColumn);
+};
