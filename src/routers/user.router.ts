@@ -8,6 +8,10 @@ require('express-async-errors');
 const routers = express.Router();
 
 routers.post('/', validateSchema(UserSchema), user.createUser);
-routers.delete('/me', authenticationMiddleware, user.deleteUserByEmail);
+routers.delete(
+	'/me',
+	// authenticationMiddleware,
+	user.deleteUserByEmail
+);
 
 export default routers;
