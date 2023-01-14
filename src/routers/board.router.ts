@@ -15,20 +15,16 @@ routers.post(
 	board.createBoard
 );
 routers.get('/', authenticationMiddleware, board.getBoards);
-routers.get(
-	'/:id',
-	// authenticationMiddleware,
-	board.getSingleBoard
-);
+routers.get('/:id', authenticationMiddleware, board.getSingleBoard);
 routers.put(
 	'/:id',
-	// authenticationMiddleware,
+	authenticationMiddleware,
 	validateSchema(BoardSchema),
 	board.updateBoardTitle
 );
 routers.put(
 	'/columns/:boardId',
-	// authenticationMiddleware,
+	authenticationMiddleware,
 	validateSchema(BoardColumnsSchema),
 	board.updateBoardColumns
 );

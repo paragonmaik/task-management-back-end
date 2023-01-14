@@ -9,18 +9,14 @@ const routers = express.Router();
 
 routers.post(
 	'/:taskId',
-	// authenticationMiddleware,
+	authenticationMiddleware,
 	validateSchema(TaskSchema),
 	subTask.createSubTask
 );
-routers.get(
-	'/:taskId',
-	// authenticationMiddleware,
-	subTask.getSubTasks
-);
+routers.get('/:taskId', authenticationMiddleware, subTask.getSubTasks);
 routers.put(
 	'/:subTaskId',
-	// authenticationMiddleware,
+	authenticationMiddleware,
 	validateSchema(TaskSchema),
 	subTask.updateSubTaskDescription
 );

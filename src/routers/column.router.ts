@@ -10,24 +10,20 @@ const routers = express.Router();
 
 routers.post(
 	'/:id',
-	// authenticationMiddleware,
+	authenticationMiddleware,
 	validateSchema(ColumnSchema),
 	column.createColumn
 );
-routers.get(
-	'/:id',
-	// authenticationMiddleware,
-	column.getColumns
-);
+routers.get('/:id', authenticationMiddleware, column.getColumns);
 routers.put(
 	'/:columnId',
-	// authenticationMiddleware,
+	authenticationMiddleware,
 	validateSchema(ColumnSchema),
 	column.updateColumnTitle
 );
 routers.put(
 	'/tasks/:boardId',
-	// authenticationMiddleware,
+	authenticationMiddleware,
 	validateSchema(ColumnTasksSchema),
 	column.updateColumnTasks
 );
