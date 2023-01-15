@@ -6,7 +6,9 @@ import * as task from '../services/task.service';
 import { disconnectDB, testSetup } from '../database/connection';
 import { StatusCodes } from 'http-status-codes';
 import { badTaskExampleList1 } from '../services/__tests__/mocks/userMocks';
+import tasksModel from '../models/tasks.model';
 
+const userPayload = { userName: 'donkeykong', email: 'donkey@example.com' };
 const loginData = {
 	email: 'donkey@example.com',
 	password: 'aquaticambience',
@@ -32,7 +34,7 @@ describe('/task ROUTE', () => {
 			const loginResponse = await request(app).post('/login').send(loginData);
 			const createdBoard = await board.createNewBoard(
 				{ boardName: 'Donkey kong V' },
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 			const createdColumn = await column.createNewColumn(
 				columnData,
@@ -53,7 +55,7 @@ describe('/task ROUTE', () => {
 			const loginResponse = await request(app).post('/login').send(loginData);
 			const createdBoard = await board.createNewBoard(
 				{ boardName: 'Donkey kong V' },
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 			const createdColumn = await column.createNewColumn(
 				columnData,
@@ -77,7 +79,7 @@ describe('/task ROUTE', () => {
 			const loginResponse = await request(app).post('/login').send(loginData);
 			const createdBoard = await board.createNewBoard(
 				{ boardName: 'Donkey kong VI' },
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 
 			const createdColumn = await column.createNewColumn(
@@ -106,7 +108,7 @@ describe('/task ROUTE', () => {
 
 			const createdBoard = await board.createNewBoard(
 				{ boardName: 'Donkey kong VII' },
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 
 			const createdColumn = await column.createNewColumn(
@@ -123,6 +125,33 @@ describe('/task ROUTE', () => {
 
 			expect(taskResponse.statusCode).toBe(StatusCodes.OK);
 			expect(taskResponse.body.description).toBe(requestBody.description);
+		});
+	});
+
+	describe('DELETE /task/:taskId', () => {
+		it('tests whether task is deleted', async () => {
+			const loginResponse = await request(app).post('/login').send(loginData);
+
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong III' },
+				userPayload
+			);
+
+			const createdColumn = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+
+			const createdTask = await task.createNewTask(taskData, createdColumn.id);
+
+			const deleteResponse = await request(app)
+				.delete(`/task/${createdTask.id}`)
+				.set('Authorization', loginResponse.body.token);
+
+			const findResponse = await tasksModel.findById(createdTask.id);
+
+			expect(deleteResponse.statusCode).toBe(StatusCodes.NO_CONTENT);
+			expect(findResponse).toBeNull();
 		});
 	});
 });

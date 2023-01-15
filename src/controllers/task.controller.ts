@@ -22,3 +22,9 @@ export const updateTaskDescription = async (req: Request, res: Response) => {
 
 	res.status(StatusCodes.OK).json(updatedTask);
 };
+
+export const deleteTaskById = async (req: Request, res: Response) => {
+	await task.deleteTask(req.params.taskId);
+
+	res.status(StatusCodes.NO_CONTENT).end();
+};

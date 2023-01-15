@@ -21,4 +21,6 @@ routers.put(
 	task.updateTaskDescription
 );
 
+routers.delete('/:taskId', authenticationMiddleware, task.deleteTaskById);
+
 export default routers;

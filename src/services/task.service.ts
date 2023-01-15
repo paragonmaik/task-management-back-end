@@ -47,6 +47,6 @@ export const deleteTask = async (taskId: string) => {
 	await tasksModel.findByIdAndDelete(taskId);
 
 	await subTasksModel.deleteMany({
-		ownerTask: { $in: taskId },
+		ownerTask: taskId,
 	});
 };
