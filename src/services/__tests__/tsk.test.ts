@@ -2,12 +2,13 @@ import * as board from '../board.service';
 import * as column from '../column.service';
 import * as task from '../task.service';
 import { disconnectDB, testSetup } from '../../database/connection';
+import tasksModel from '../../models/tasks.model';
 
 const userPayload = { userName: 'donkeykong', email: 'donkey@example.com' };
 const taskData = { description: 'Beat all of the donkey kong games.' };
 const newTaskDescription = '100% all donkey kong games.';
 
-describe('Column service', () => {
+describe('Task service', () => {
 	beforeAll(async () => {
 		await testSetup();
 	});
@@ -75,6 +76,28 @@ describe('Column service', () => {
 			);
 
 			expect(updateTask.description).toBe(newTaskDescription);
+		});
+	});
+
+	describe('Delete task from the database', () => {
+		it('tests whether task is deleted', async () => {
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong III' },
+				userPayload
+			);
+
+			const createdColumn = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+
+			const createdTask = await task.createNewTask(taskData, createdColumn.id);
+
+			await task.deleteTask(createdTask.id);
+
+			const deletedTask = await tasksModel.findById(createdTask.id);
+			console.log('---------------', deletedTask);
+			expect(deletedTask).toBeNull();
 		});
 	});
 });

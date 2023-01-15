@@ -94,8 +94,8 @@ describe('Board service', () => {
 		});
 	});
 
-	describe('Delete registered user from the database', () => {
-		it('tests whether user is deleted', async () => {
+	describe('Delete subtask from the database', () => {
+		it('tests whether subtask is deleted', async () => {
 			const createdBoard = await board.createNewBoard(
 				{ boardName: 'Donkey kong III' },
 				userPayload

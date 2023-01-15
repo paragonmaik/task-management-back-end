@@ -1,8 +1,9 @@
-import { ITask } from '../interfaces/ITask';
 import tasksModel from '../models/tasks.model';
 import columnsModel from '../models/columns.model';
+import { ITask } from '../interfaces/ITask';
 import { HttpException } from '../middlewares/HttpException';
 import { StatusCodes } from 'http-status-codes';
+import subTasksModel from '../models/subTasks.model';
 
 export const createNewTask = async (task: ITask, columnId: string) => {
 	const createdTask = await tasksModel.create({
@@ -40,4 +41,12 @@ export const updateDescriptionById = async (
 	}
 
 	return task;
+};
+
+export const deleteTask = async (taskId: string) => {
+	await tasksModel.findByIdAndDelete(taskId);
+
+	await subTasksModel.deleteMany({
+		ownerTask: { $in: taskId },
+	});
 };
