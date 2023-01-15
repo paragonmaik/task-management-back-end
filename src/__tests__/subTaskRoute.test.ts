@@ -7,7 +7,9 @@ import * as subTask from '../services/subTask.service';
 import { disconnectDB, testSetup } from '../database/connection';
 import { StatusCodes } from 'http-status-codes';
 import { badSubTaskExampleList1 } from '../services/__tests__/mocks/userMocks';
+import subTasksModel from '../models/subTasks.model';
 
+const userPayload = { userName: 'donkeykong', email: 'donkey@example.com' };
 const loginData = {
 	email: 'donkey@example.com',
 	password: 'aquaticambience',
@@ -37,7 +39,7 @@ describe('/subTask ROUTE', () => {
 			const loginResponse = await request(app).post('/login').send(loginData);
 			const createdBoard = await board.createNewBoard(
 				{ boardName: 'Donkey kong V' },
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 			const createdColumn = await column.createNewColumn(
 				columnData,
@@ -61,7 +63,7 @@ describe('/subTask ROUTE', () => {
 			const loginResponse = await request(app).post('/login').send(loginData);
 			const createdBoard = await board.createNewBoard(
 				{ boardName: 'Donkey kong V' },
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 			const createdColumn = await column.createNewColumn(
 				columnData,
@@ -87,7 +89,7 @@ describe('/subTask ROUTE', () => {
 			const loginResponse = await request(app).post('/login').send(loginData);
 			const createdBoard = await board.createNewBoard(
 				{ boardName: 'Donkey kong VI' },
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 
 			const createdColumn = await column.createNewColumn(
@@ -119,7 +121,7 @@ describe('/subTask ROUTE', () => {
 
 			const createdBoard = await board.createNewBoard(
 				{ boardName: 'Donkey kong VII' },
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 
 			const createdColumn = await column.createNewColumn(
@@ -141,6 +143,40 @@ describe('/subTask ROUTE', () => {
 
 			expect(subTaskResponse.statusCode).toBe(StatusCodes.OK);
 			expect(subTaskResponse.body.description).toBe(requestBody.description);
+		});
+	});
+
+	describe('DELETE /subtask/:subtaskId', () => {
+		it('tests whether user is deleted', async () => {
+			const loginResponse = await request(app).post('/login').send(loginData);
+
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong III' },
+				userPayload
+			);
+
+			const createdColumn = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+
+			const createdTask = await task.createNewTask(taskData, createdColumn.id);
+
+			const createdSubTask = await subTask.createNewSubTask(
+				subTaskData,
+				createdTask.id
+			);
+
+			const deleteResponse = await request(app)
+				.delete(`/subtask/${createdSubTask.id}`)
+				.set('Authorization', loginResponse.body.token);
+
+			const findResponse = await subTasksModel.findByIdAndDelete(
+				createdSubTask.id
+			);
+
+			expect(deleteResponse.statusCode).toBe(StatusCodes.NO_CONTENT);
+			expect(findResponse).toBeNull();
 		});
 	});
 });
