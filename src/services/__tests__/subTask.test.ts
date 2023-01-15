@@ -3,6 +3,7 @@ import * as column from '../column.service';
 import * as task from '../task.service';
 import * as subTask from '../subTask.service';
 import { disconnectDB, testSetup } from '../../database/connection';
+import subTasksModel from '../../models/subTasks.model';
 
 const userPayload = { userName: 'donkeykong', email: 'donkey@example.com' };
 const taskData = { description: 'Beat all of the donkey kong games.' };
@@ -90,6 +91,33 @@ describe('Board service', () => {
 			);
 
 			expect(updateSubTask.description).toBe(newSubTaskDescription);
+		});
+	});
+
+	describe('Delete registered user from the database', () => {
+		it('tests whether user is deleted', async () => {
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong III' },
+				userPayload
+			);
+
+			const createdColumn = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+
+			const createdTask = await task.createNewTask(taskData, createdColumn.id);
+
+			const createdSubTask = await subTask.createNewSubTask(
+				subTaskData,
+				createdTask.id
+			);
+
+			await subTask.deleteSubTask(createdSubTask.id);
+
+			const deletedSubTask = await subTasksModel.findById(createdSubTask.id);
+
+			expect(deletedSubTask).toBeNull();
 		});
 	});
 });

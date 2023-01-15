@@ -41,3 +41,6 @@ export const updateDescriptionById = async (
 
 	return subTask;
 };
+
+export const deleteSubTask = async (subTaskId: string) =>
+	subTasksModel.findByIdAndDelete(subTaskId);
