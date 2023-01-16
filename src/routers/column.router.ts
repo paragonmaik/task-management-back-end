@@ -27,5 +27,6 @@ routers.put(
 	validateSchema(ColumnTasksSchema),
 	column.updateColumnTasks
 );
+routers.delete('/:columnId', authenticationMiddleware, column.deleteColumnById);
 
 export default routers;

@@ -3,10 +3,12 @@ import app from '../app';
 import * as board from '../services/board.service';
 import * as column from '../services/column.service';
 import * as task from '../services/task.service';
+import columnsModel from '../models/columns.model';
 import { disconnectDB, testSetup } from '../database/connection';
 import { StatusCodes } from 'http-status-codes';
 import { badColumnExampleList1 } from '../services/__tests__/mocks/userMocks';
 
+const userPayload = { userName: 'donkeykong', email: 'donkey@example.com' };
 const taskData1 = { description: 'First task' };
 const taskData2 = { description: 'Second task' };
 const loginData = {
@@ -34,7 +36,7 @@ describe('/column ROUTE', () => {
 				{
 					boardName: 'Donkey kong V',
 				},
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 
 			const columnResponse = await request(app)
@@ -53,7 +55,7 @@ describe('/column ROUTE', () => {
 				{
 					boardName: 'Donkey kong V',
 				},
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 
 			for (const badColumn of badColumnExampleList1) {
@@ -75,7 +77,7 @@ describe('/column ROUTE', () => {
 				{
 					boardName: 'Donkey kong VI',
 				},
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 
 			await column.createNewColumn({ columnName: 'To do' }, createdBoard.id);
@@ -103,7 +105,7 @@ describe('/column ROUTE', () => {
 
 			const createdBoard = await board.createNewBoard(
 				{ boardName: 'Donkey kong VII' },
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 
 			const createdColumn = await column.createNewColumn(
@@ -126,7 +128,7 @@ describe('/column ROUTE', () => {
 			const loginResponse = await request(app).post('/login').send(loginData);
 			const createdBoard = await board.createNewBoard(
 				{ boardName: 'Donkey kong V' },
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 			const createdColumn1 = await column.createNewColumn(
 				{ columnName: 'To do' },
@@ -159,7 +161,7 @@ describe('/column ROUTE', () => {
 			const loginResponse = await request(app).post('/login').send(loginData);
 			const createdBoard = await board.createNewBoard(
 				{ boardName: 'Donkey kong V' },
-				{ userName: 'donkeykong', email: 'donkey@example.com' }
+				userPayload
 			);
 
 			const createdColumn1 = await column.createNewColumn(
@@ -181,6 +183,31 @@ describe('/column ROUTE', () => {
 
 			expect(statusCode).toBe(StatusCodes.BAD_REQUEST);
 			expect(body.message).toBeDefined();
+		});
+	});
+
+	describe('DELETE /column/:columnId', () => {
+		it('tests whether column is deleted', async () => {
+			const loginResponse = await request(app).post('/login').send(loginData);
+
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong III' },
+				userPayload
+			);
+
+			const createdColumn = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+
+			const deleteResponse = await request(app)
+				.delete(`/column/${createdColumn.id}`)
+				.set('Authorization', loginResponse.body.token);
+
+			const findResponse = await columnsModel.findById(createdColumn.id);
+
+			expect(deleteResponse.statusCode).toBe(StatusCodes.NO_CONTENT);
+			expect(findResponse).toBeNull();
 		});
 	});
 });

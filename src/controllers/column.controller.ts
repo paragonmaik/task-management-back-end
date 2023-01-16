@@ -30,3 +30,9 @@ export const updateColumnTasks = async (req: Request, res: Response) => {
 
 	res.status(StatusCodes.OK).json(updatedColumn);
 };
+
+export const deleteColumnById = async (req: Request, res: Response) => {
+	await column.deleteColumn(req.params.columnId);
+
+	res.status(StatusCodes.NO_CONTENT).end();
+};
