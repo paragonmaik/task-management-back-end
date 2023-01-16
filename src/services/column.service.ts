@@ -6,6 +6,7 @@ import columnModel from '../models/columns.model';
 import boardModel from '../models/board.model';
 import tasksModel from '../models/tasks.model';
 import subTasksModel from '../models/subTasks.model';
+import * as taskService from './task.service';
 
 interface UpdatedColumns extends IColumn {
 	_id: Types.ObjectId;
@@ -89,13 +90,7 @@ export const deleteColumn = async (columnId: string) => {
 		ownerColumn: columnId,
 	});
 
-	await tasksModel.deleteMany({
-		ownerColumn: columnId,
-	});
-
 	tasks.forEach(async (task) => {
-		await subTasksModel.deleteMany({
-			ownerTask: { $in: task.id },
-		});
+		await taskService.deleteTask(task.id);
 	});
 };
