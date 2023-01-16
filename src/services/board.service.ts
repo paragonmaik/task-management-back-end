@@ -5,6 +5,8 @@ import { findUserByUniqueField } from './helpers/helpers';
 import { Types, Document } from 'mongoose';
 import { HttpException } from '../middlewares/HttpException';
 import { StatusCodes } from 'http-status-codes';
+import * as columnService from './column.service';
+import columnsModel from '../models/columns.model';
 
 const addBoardToUser = async (email: string, boardId: Types.ObjectId) => {
 	const user = await findUserByUniqueField('email', email);
@@ -85,4 +87,16 @@ export const updateBoardColumnsOrder = async (
 	}
 
 	return board;
+};
+
+export const deleteBoard = async (boardId: string) => {
+	await boardModel.findByIdAndDelete(boardId);
+
+	const columns = await columnsModel.find({
+		ownerBoard: boardId,
+	});
+
+	columns.forEach(async (column) => {
+		await columnService.deleteColumn(column.id);
+	});
 };

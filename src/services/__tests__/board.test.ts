@@ -1,6 +1,7 @@
 import * as board from '../board.service';
 import * as column from '../column.service';
 import { disconnectDB, testSetup } from '../../database/connection';
+import boardModel from '../../models/board.model';
 
 const userPayload = { userName: 'donkeykong', email: 'donkey@example.com' };
 
@@ -16,9 +17,7 @@ describe('Board service', () => {
 	describe('Creates new board', () => {
 		it('tests whether a new board is created', async () => {
 			const createdBoard = await board.createNewBoard(
-				{
-					boardName: 'Donkey kong III',
-				},
+				{ boardName: 'Donkey kong III' },
 				userPayload
 			);
 
@@ -28,12 +27,7 @@ describe('Board service', () => {
 
 	describe("Get all user's board", () => {
 		it('tests whether a list of all boards are returned', async () => {
-			await board.createNewBoard(
-				{
-					boardName: 'Donkey kong IV',
-				},
-				userPayload
-			);
+			await board.createNewBoard({ boardName: 'Donkey kong IV' }, userPayload);
 
 			const boardsList = await board.getAllBoards('donkey@example.com');
 
@@ -44,9 +38,7 @@ describe('Board service', () => {
 	describe('Get board', () => {
 		it('tests whether a board is returned', async () => {
 			const createdBoard = await board.createNewBoard(
-				{
-					boardName: 'Donkey kong V',
-				},
+				{ boardName: 'Donkey kong V' },
 				userPayload
 			);
 
@@ -60,9 +52,7 @@ describe('Board service', () => {
 		it('tests whether the selected board is updated', async () => {
 			const newBoardName = 'Donkey Kong V: Empire Strikes Back';
 			const createdBoard = await board.createNewBoard(
-				{
-					boardName: 'Donkey kong V',
-				},
+				{ boardName: 'Donkey kong V' },
 				userPayload
 			);
 
@@ -78,9 +68,7 @@ describe('Board service', () => {
 	describe('Update board columns list', () => {
 		it('tests whether the selected board is updated', async () => {
 			const createdBoard = await board.createNewBoard(
-				{
-					boardName: 'Donkey kong V',
-				},
+				{ boardName: 'Donkey kong V' },
 				userPayload
 			);
 
@@ -101,6 +89,21 @@ describe('Board service', () => {
 			);
 
 			expect(updatedBoard.columns).toBeDefined();
+		});
+	});
+
+	describe('Delete board from the database', () => {
+		it('tests whether board is deleted', async () => {
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong III' },
+				userPayload
+			);
+
+			await board.deleteBoard(createdBoard.id);
+
+			const deletedBoard = await boardModel.findById(createdBoard.id);
+
+			expect(deletedBoard).toBeNull();
 		});
 	});
 });

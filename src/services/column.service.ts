@@ -5,7 +5,6 @@ import { IColumn } from '../interfaces/IColumn';
 import columnModel from '../models/columns.model';
 import boardModel from '../models/board.model';
 import tasksModel from '../models/tasks.model';
-import subTasksModel from '../models/subTasks.model';
 import * as taskService from './task.service';
 
 interface UpdatedColumns extends IColumn {
