@@ -2,6 +2,7 @@ import * as board from '../board.service';
 import * as column from '../column.service';
 import * as task from '../task.service';
 import { disconnectDB, testSetup } from '../../database/connection';
+import columnsModel from '../../models/columns.model';
 
 const taskData1 = { description: 'First task' };
 const taskData2 = { description: 'Second task' };
@@ -137,6 +138,26 @@ describe('Column service', () => {
 			]);
 
 			expect(updatedColumns[0].tasks).toBeDefined();
+		});
+	});
+
+	describe('Delete column from the database', () => {
+		it('tests whether column is deleted', async () => {
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong III' },
+				userPayload
+			);
+
+			const createdColumn = await column.createNewColumn(
+				{ columnName: 'To do' },
+				createdBoard.id
+			);
+
+			await column.deleteColumn(createdColumn.id);
+
+			const deletedColumn = await columnsModel.findById(createdColumn.id);
+
+			expect(deletedColumn).toBeNull();
 		});
 	});
 });

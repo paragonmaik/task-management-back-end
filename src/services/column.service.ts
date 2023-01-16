@@ -1,10 +1,11 @@
 import { Types } from 'mongoose';
-import columnModel from '../models/columns.model';
-import boardModel from '../models/board.model';
-import tasksModel from '../models/tasks.model';
 import { HttpException } from '../middlewares/HttpException';
 import { StatusCodes } from 'http-status-codes';
 import { IColumn } from '../interfaces/IColumn';
+import columnModel from '../models/columns.model';
+import boardModel from '../models/board.model';
+import tasksModel from '../models/tasks.model';
+import subTasksModel from '../models/subTasks.model';
 
 interface UpdatedColumns extends IColumn {
 	_id: Types.ObjectId;
@@ -79,4 +80,22 @@ export const updateColumnTasksOrder = async (
 		columns.push(response as UpdatedColumns);
 	}
 	return columns;
+};
+
+export const deleteColumn = async (columnId: string) => {
+	await columnModel.findByIdAndDelete(columnId);
+
+	const tasks = await tasksModel.find({
+		ownerColumn: columnId,
+	});
+
+	await tasksModel.deleteMany({
+		ownerColumn: columnId,
+	});
+
+	tasks.forEach(async (task) => {
+		await subTasksModel.deleteMany({
+			ownerTask: { $in: task.id },
+		});
+	});
 };

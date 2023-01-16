@@ -96,7 +96,7 @@ describe('Task service', () => {
 			await task.deleteTask(createdTask.id);
 
 			const deletedTask = await tasksModel.findById(createdTask.id);
-			console.log('---------------', deletedTask);
+
 			expect(deletedTask).toBeNull();
 		});
 	});
