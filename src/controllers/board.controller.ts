@@ -43,3 +43,9 @@ export const updateBoardColumns = async (req: Request, res: Response) => {
 
 	res.status(StatusCodes.OK).json(updatedBoard);
 };
+
+export const deleteBoardById = async (req: Request, res: Response) => {
+	await board.deleteBoard(req.params.boardId);
+
+	res.status(StatusCodes.NO_CONTENT).end();
+};

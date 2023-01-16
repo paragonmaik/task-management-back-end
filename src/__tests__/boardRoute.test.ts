@@ -8,7 +8,9 @@ import {
 } from '../services/__tests__/mocks/userMocks';
 import * as board from '../services/board.service';
 import * as column from '../services/column.service';
+import boardModel from '../models/board.model';
 
+const userPayload = { userName: 'donkeykong', email: 'donkey@example.com' };
 const loginData = {
 	email: 'donkey@example.com',
 	password: 'aquaticambience',
@@ -175,6 +177,26 @@ describe('/board ROUTE', () => {
 				expect(boardResponse.statusCode).toBe(StatusCodes.BAD_REQUEST);
 				expect(boardResponse.body.message).toBeDefined();
 			}
+		});
+	});
+
+	describe('DELETE /board/:boardId', () => {
+		it('tests whether board is deleted', async () => {
+			const loginResponse = await request(app).post('/login').send(loginData);
+
+			const createdBoard = await board.createNewBoard(
+				{ boardName: 'Donkey kong III' },
+				userPayload
+			);
+
+			const deleteResponse = await request(app)
+				.delete(`/board/${createdBoard.id}`)
+				.set('Authorization', loginResponse.body.token);
+
+			const findResponse = await boardModel.findById(createdBoard.id);
+
+			expect(deleteResponse.statusCode).toBe(StatusCodes.NO_CONTENT);
+			expect(findResponse).toBeNull();
 		});
 	});
 });

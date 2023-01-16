@@ -28,5 +28,6 @@ routers.put(
 	validateSchema(BoardColumnsSchema),
 	board.updateBoardColumns
 );
+routers.delete('/:boardId', authenticationMiddleware, board.deleteBoardById);
 
 export default routers;

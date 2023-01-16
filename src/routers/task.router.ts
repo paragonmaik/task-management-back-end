@@ -20,7 +20,6 @@ routers.put(
 	validateSchema(TaskSchema),
 	task.updateTaskDescription
 );
-
 routers.delete('/:taskId', authenticationMiddleware, task.deleteTaskById);
 
 export default routers;
