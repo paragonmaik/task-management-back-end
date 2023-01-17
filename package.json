@@ -39,7 +39,8 @@
     "dev": "nodemon src/server.ts",
     "test": "jest",
     "build": "tsc -p tsconfig.json",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "render": "node server.js"
   },
   "repository": {
     "type": "git",
