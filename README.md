@@ -1,3 +1,26 @@
-# task-management-back-end
 
-WIP
+## Task-Management-back-end
+
+Back end done with NodeJs, type script and Express.
+
+[front-end-repo](https://github.com/paragonmaik/task-management)
+
+## Demo
+[task-management](https://tasks-management-app.vercel.app/)
+
+## To do
+ - [ ] Add members route
+ 
+## How to run
+
+```bash
+  npm install
+  npm run dev
+```
+    
+## Running tests
+
+```bash
+  npm test <test-file-name>
+```
+
