@@ -1,7 +1,7 @@
 
 ## Task-Management-back-end
 
-Back end done with NodeJs, type script and Express.
+Back end done with NodeJs, TypeScript, Express and Mongodb.
 
 [front-end-repo](https://github.com/paragonmaik/task-management-front-end)
 
