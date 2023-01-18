@@ -3,7 +3,7 @@
 
 Back end done with NodeJs, type script and Express.
 
-[front-end-repo](https://github.com/paragonmaik/task-management)
+[front-end-repo](https://github.com/paragonmaik/task-management-front-end)
 
 ## Demo
 [task-management](https://tasks-management-app.vercel.app/)
