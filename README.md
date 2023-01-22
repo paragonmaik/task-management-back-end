@@ -8,7 +8,7 @@ Back end done with NodeJs, TypeScript, Express and Mongodb.
 [front-end-repo](https://github.com/paragonmaik/task-management-front-end)
 
 ## Demo
-[task-management](https://tasks-management-app.vercel.app/)
+Live demo [task-management](https://tasks-management-app.vercel.app/)
 
 ## To do
  - [ ] Add members route
