@@ -9,5 +9,6 @@ const routers = express.Router();
 
 routers.post('/', validateSchema(UserSchema), user.createUser);
 routers.delete('/me', authenticationMiddleware, user.deleteUserByEmail);
+routers.get("/info", user.head)
 
 export default routers;

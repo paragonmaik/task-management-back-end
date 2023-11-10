@@ -4,17 +4,21 @@ import { StatusCodes } from 'http-status-codes';
 import * as user from '../services/user.service';
 
 export const createUser = async (
-	req: Request<unknown, unknown, IUser>,
-	res: Response
+  req: Request<unknown, unknown, IUser>,
+  res: Response
 ) => {
-	const token = await user.registerNewUser(req.body);
+  const token = await user.registerNewUser(req.body);
 
-	res.status(StatusCodes.CREATED).json({ token });
+  res.status(StatusCodes.CREATED).json({ token });
 };
 
 export const deleteUserByEmail = async (req: Request, res: Response) => {
-	const { email } = res.locals.payload;
+  const { email } = res.locals.payload;
 
-	await user.deleteUser(email);
-	res.status(StatusCodes.NO_CONTENT).end();
+  await user.deleteUser(email);
+  res.status(StatusCodes.NO_CONTENT).end();
 };
+
+export const head = async (_req: Request, res: Response) => {
+  res.status(StatusCodes.OK).json({ message: "test" })
+}
